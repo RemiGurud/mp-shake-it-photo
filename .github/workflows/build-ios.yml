@@ -3,7 +3,7 @@ name: Build ShakeItPhoto IPA
 on:
   workflow_dispatch:
 
-  jobs:
+jobs:
   build:
     runs-on: macos-14
 
@@ -11,7 +11,7 @@ on:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-         - name: Show Xcode version
+      - name: Show Xcode version
         run: xcodebuild -version
 
       - name: Install CocoaPods
@@ -19,7 +19,7 @@ on:
           sudo gem install cocoapods
           pod --version
 
-          - name: Install Pods
+      - name: Install Pods
         run: pod install --repo-update
 
       - name: Show schemes
@@ -28,7 +28,7 @@ on:
             -workspace ShakeItPhoto.xcworkspace \
             -list
 
-            - name: Create Firebase config
+      - name: Create Firebase config
         run: |
           cat > GoogleService-Info.plist <<'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
@@ -46,7 +46,7 @@ on:
           </plist>
           EOF
 
-          - name: Build unsigned app
+      - name: Build unsigned app
         run: |
           xcodebuild \
             -workspace ShakeItPhoto.xcworkspace \
@@ -60,7 +60,7 @@ on:
             CODE_SIGN_IDENTITY="" \
             build
 
-            - name: Create IPA
+      - name: Create IPA
         run: |
           mkdir -p Payload
           APP_PATH=$(find build -type d -name "ShakeItPhoto.app" | head -1)
@@ -68,7 +68,7 @@ on:
           cp -R "$APP_PATH" Payload/
           zip -r ShakeItPhoto.ipa Payload
 
-          - name: Upload IPA
+      - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: ShakeItPhoto-IPA
