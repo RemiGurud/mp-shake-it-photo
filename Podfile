@@ -2,7 +2,5 @@
 platform :ios, '14.0'
 
 target 'ShakeItPhoto' do
-    use_frameworks!
-
-    
+    use_frameworks!   
 end
